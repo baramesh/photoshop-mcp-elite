@@ -56,7 +56,7 @@ def open_document_script(file_path: str) -> str:
     }})();
     """
 
-def save_document_script(file_path: str = None) -> str:
+def save_document_script(file_path: str | None = None) -> str:
     if file_path:
         escaped = file_path.replace("\\", "\\\\").replace('"', '\\"')
         return f"""
@@ -154,6 +154,11 @@ def create_layer_script(name: str = "Layer", opacity: float = 100.0, blend_mode:
             var l = doc.artLayers.add();
             l.name = "{escaped_name}";
             l.opacity = {opacity};
+            if ("{blend_mode}" !== "normal") {{
+                try {{
+                    l.blendMode = BlendMode.{blend_mode.upper()};
+                }} catch(err) {{}}
+            }}
             return JSON.stringify({{ok: true, name: l.name, id: l.id}});
         }} catch(e) {{
             return JSON.stringify({{ok: false, error: e.message}});
@@ -206,7 +211,7 @@ def set_layer_opacity_script(name: str, opacity: float) -> str:
     }})();
     """
 
-def duplicate_layer_script(name: str = None, new_name: str = None) -> str:
+def duplicate_layer_script(name: str | None = None, new_name: str | None = None) -> str:
     target = f'doc.layers.getByName("{name.replace(chr(34), chr(92)+chr(34))}")' if name else "doc.activeLayer"
     rename = f'dup.name = "{new_name.replace(chr(34), chr(92)+chr(34))}";' if new_name else ""
     return f"""

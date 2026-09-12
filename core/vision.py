@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any
+
 from PIL import Image, ImageStat
 
 
 class VisionAnalyzer:
     @staticmethod
-    def analyze_image(image_path: str) -> Dict[str, Any]:
+    def analyze_image(image_path: str) -> dict[str, Any]:
         """Analyzes an image file for dimensions, tone, luminance, and dominant color temperature."""
         if not os.path.exists(image_path):
             raise FileNotFoundError(f"Image not found at: {image_path}")
@@ -31,7 +32,7 @@ class VisionAnalyzer:
             warmth = (r_mean - b_mean) / 255.0
 
             # RMS contrast per channel
-            r_rms, g_rms, b_rms = stat.rms[:3]
+            _r_rms, _g_rms, _b_rms = stat.rms[:3]
 
             mood = "neutral"
             if warmth > 0.1:

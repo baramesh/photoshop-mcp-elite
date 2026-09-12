@@ -18,3 +18,12 @@ dependencies = [
 
 [project.scripts]
 photoshop-mcp = "server:main"
+
+[dependency-groups]
+dev = [
+    "bandit>=1.9.4",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.7",
+]

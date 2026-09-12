@@ -10,8 +10,7 @@ import json
 import os
 import subprocess
 import tempfile
-from typing import Any, Dict, Optional
-
+from typing import Any
 
 JSON2_POLYFILL = """
 if (typeof JSON === "undefined") {
@@ -73,10 +72,11 @@ class PhotoshopBridge:
             end try
             '''
             proc = subprocess.run(
-                ["osascript", "-e", ascript],
+                ["/usr/bin/osascript", "-e", ascript],  # nosec B603
                 capture_output=True,
                 text=True,
                 timeout=self.timeout_seconds,
+                check=False,
             )
 
             stdout = proc.stdout.strip()
@@ -92,10 +92,11 @@ class PhotoshopBridge:
                 end try
                 '''
                 proc2 = subprocess.run(
-                    ["osascript", "-e", ascript_fallback],
+                    ["/usr/bin/osascript", "-e", ascript_fallback],  # nosec B603
                     capture_output=True,
                     text=True,
                     timeout=self.timeout_seconds,
+                    check=False,
                 )
                 if proc2.returncode != 0:
                     err_msg = proc2.stderr.strip() or stderr
@@ -109,7 +110,7 @@ class PhotoshopBridge:
             if (stdout.startswith("{") and stdout.endswith("}")) or (stdout.startswith("[") and stdout.endswith("]")):
                 try:
                     return json.loads(stdout)
-                except Exception:
+                except ValueError:
                     pass
 
             return stdout

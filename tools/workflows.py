@@ -9,17 +9,18 @@ Features:
 from __future__ import annotations
 
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any
+
 from core.bridge import bridge
 from core.vision import analyzer
 
 
 def smart_remove_distractions(
-    regions: List[List[int]],
+    regions: list[list[int]],
     feather_px: float = 2.5,
     expand_px: int = 6,
     create_backup_layer: bool = True
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Smartly removes multiple distraction regions (e.g., unwanted people, objects)
     using boundary expansion, smooth feathering, and Content-Aware Fill on a dedicated retouch layer.
 
@@ -29,8 +30,6 @@ def smart_remove_distractions(
         expand_px: Context expansion in pixels to remove halo artifacts (default 6).
         create_backup_layer: If True, duplicates the active layer to a non-destructive 'Retouch' layer.
     """
-    results = []
-
     # Build JSX to handle the multi-region removal in one smooth ExtendScript run
     jsx = f"""
     (function() {{
@@ -104,7 +103,7 @@ def harmonize_sky(
     haze_opacity: float = 20.0,
     sky_opacity: float = 85.0,
     warm_foreground: bool = True
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Replaces sky seamlessly by:
     1. Running Sensei Select Sky to isolate exact sky boundary around structures.
     2. Placing new sky image onto a masked layer.
@@ -217,7 +216,7 @@ def match_lighting_and_tone(
     target_mood: str = "vibrant_daylight",
     contrast_amount: int = 15,
     saturation_boost: int = 10
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Harmonizes lighting, contrast, and color vibrance across the entire composition.
 
     Args:
@@ -253,7 +252,7 @@ def match_lighting_and_tone(
     return {"ok": True, "targetMood": target_mood}
 
 
-def generative_fill_ai(prompt: str = "", wait_completion: bool = True, timeout_seconds: int = 40) -> Dict[str, Any]:
+def generative_fill_ai(prompt: str = "", wait_completion: bool = True, timeout_seconds: int = 40) -> dict[str, Any]:
     """Autonomously triggers Adobe Firefly Generative Fill on current selection using GUI automation."""
     import subprocess
     import time
@@ -271,7 +270,7 @@ def generative_fill_ai(prompt: str = "", wait_completion: bool = True, timeout_s
         end tell
     end tell
     '''
-    proc = subprocess.run(["osascript", "-e", ascript], capture_output=True, text=True)
+    proc = subprocess.run(["/usr/bin/osascript", "-e", ascript], capture_output=True, text=True, check=False)  # nosec B603
     if proc.returncode != 0:
         return {"ok": False, "error": proc.stderr.strip()}
 
@@ -295,7 +294,7 @@ def generative_fill_ai(prompt: str = "", wait_completion: bool = True, timeout_s
     return {"ok": True, "message": "Adobe Firefly Generative Fill executed autonomously"}
 
 
-def generative_remove_ai(regions: List[List[int]], feather_px: float = 2.0) -> Dict[str, Any]:
+def generative_remove_ai(regions: list[list[int]], feather_px: float = 2.0) -> dict[str, Any]:
     """Selects multiple bounding boxes and runs Adobe Firefly Generative Fill autonomously to remove objects."""
     for r in regions:
         left, top, right, bottom = r

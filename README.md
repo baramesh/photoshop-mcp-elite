@@ -1,4 +1,4 @@
-# Photoshop Python MCP (`photoshop-python-mcp`)
+# Photoshop MCP Elite (`photoshop-mcp-elite`)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-brightgreen.svg)](https://www.python.org/)
@@ -6,7 +6,7 @@
 
 A high-performance, native Python **Model Context Protocol (MCP)** server for **Adobe Photoshop** on macOS.
 
-Unlike legacy Node.js wrappers that rely on outdated 2010 PatchMatch algorithms and crash on ExtendScript ES3 syntax mismatches, `photoshop-python-mcp` delivers:
+Unlike legacy Node.js wrappers that rely on outdated 2010 PatchMatch algorithms and crash on ExtendScript ES3 syntax mismatches, `photoshop-mcp-elite` delivers:
 * **True Adobe Firefly Generative AI Automation**: Autonomously triggers Generative Fill and AI object removal via macOS accessibility bridges.
 * **Intelligent Photographic Workflows**: Includes automated Sky Replacement with atmospheric horizon haze and foreground relighting, precision distraction removal, and color harmony adjustments.
 * **Bulletproof ES3 Engine**: Embedded JSON2 polyfill and isolated ActionManager execution that completely prevents `JSON is undefined` and quote-escaping errors.
@@ -36,8 +36,8 @@ Unlike legacy Node.js wrappers that rely on outdated 2010 PatchMatch algorithms 
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/baramesh/photoshop-python-mcp.git
-cd photoshop-python-mcp
+git clone https://github.com/baramesh/photoshop-mcp-elite.git
+cd photoshop-mcp-elite
 ```
 
 ### 2. Install Dependencies
@@ -67,7 +67,7 @@ Add `photoshop` to your client configuration:
       "args": [
         "run",
         "--directory",
-        "/path/to/photoshop-python-mcp",
+        "/path/to/photoshop-mcp-elite",
         "python",
         "server.py"
       ]
@@ -85,7 +85,7 @@ Add `photoshop` to your client configuration:
       "args": [
         "run",
         "--directory",
-        "/path/to/photoshop-python-mcp",
+        "/path/to/photoshop-mcp-elite",
         "python",
         "server.py"
       ]
@@ -132,7 +132,7 @@ Add `photoshop` to your client configuration:
 AI Client (Claude / Cursor / Antigravity)
                │ (MCP JSON-RPC over stdio)
                ▼
-   photoshop-python-mcp (Python 3.12 / FastMCP)
+   photoshop-mcp-elite (Python 3.12 / FastMCP)
         ├── core/bridge.py        (AppleScript / JSX Execution Engine)
         ├── core/vision.py        (Pillow / Luminance & Warmth Analyzer)
         ├── tools/workflows.py    (Autonomous Firefly & Sky Harmonization)

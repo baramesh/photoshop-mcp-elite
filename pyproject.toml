@@ -1,5 +1,5 @@
 [project]
-name = "photoshop-python-mcp"
+name = "photoshop-mcp-elite"
 version = "0.1.0"
 description = "High-performance, autonomous Adobe Photoshop MCP server in Python with AppleScript bridging, Adobe Firefly Generative AI automation, and photographic workflows."
 readme = "README.md"

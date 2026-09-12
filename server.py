@@ -306,6 +306,82 @@ def photoshop_generative_remove_ai(regions: list[list[int]], feather_px: float =
 
 
 @app.tool()
+def photoshop_convert_to_smart_object() -> dict[str, Any]:
+    """Convert the active layer or selected layers into a Smart Object."""
+    return layer.convert_to_smart_object()
+
+
+@app.tool()
+def photoshop_create_adjustment_layer(adj_type: str = "curves", name: str | None = None) -> dict[str, Any]:
+    """Create a non-destructive Adjustment Layer (curves, hue_saturation, levels, brightness_contrast, vibrance)."""
+    return layer.create_adjustment_layer(adj_type, name)
+
+
+@app.tool()
+def photoshop_apply_camera_raw_filter(
+    exposure: float = 0.0,
+    contrast: int = 0,
+    highlights: int = 0,
+    shadows: int = 0,
+    clarity: int = 0,
+    dehaze: int = 0,
+    vibrance: int = 0,
+    saturation: int = 0,
+    temperature: int = 0,
+    tint: int = 0
+) -> dict[str, Any]:
+    """Apply professional Adobe Camera Raw Filter with exposure, clarity, dehaze, temperature, and vibrance controls."""
+    return adjustment.apply_camera_raw_filter(
+        exposure=exposure,
+        contrast=contrast,
+        highlights=highlights,
+        shadows=shadows,
+        clarity=clarity,
+        dehaze=dehaze,
+        vibrance=vibrance,
+        saturation=saturation,
+        temperature=temperature,
+        tint=tint
+    )
+
+
+@app.tool()
+def photoshop_add_text_layer(
+    text: str,
+    font_name: str = "Helvetica",
+    font_size_pt: float = 24.0,
+    color_hex: str = "FFFFFF",
+    x_px: float = 100.0,
+    y_px: float = 100.0,
+    justification: str = "left"
+) -> dict[str, Any]:
+    """Create a vector typography Text Layer in the active document."""
+    return layer.add_text_layer(text, font_name, font_size_pt, color_hex, x_px, y_px, justification)
+
+
+@app.tool()
+def photoshop_apply_layer_style(
+    drop_shadow: bool = False,
+    shadow_opacity: float = 50.0,
+    shadow_distance: int = 5,
+    shadow_size: int = 10,
+    stroke: bool = False,
+    stroke_size: int = 2,
+    stroke_color_hex: str = "000000"
+) -> dict[str, Any]:
+    """Apply Layer Styles (FX) like Drop Shadow and Stroke to the active layer."""
+    return layer.apply_layer_style(
+        drop_shadow=drop_shadow,
+        shadow_opacity=shadow_opacity,
+        shadow_distance=shadow_distance,
+        shadow_size=shadow_size,
+        stroke=stroke,
+        stroke_size=stroke_size,
+        stroke_color_hex=stroke_color_hex
+    )
+
+
+@app.tool()
 def photoshop_execute_custom_jsx(script: str) -> dict[str, Any]:
     """Execute raw ES3 ExtendScript code directly inside Photoshop with full JSON serialization."""
     res = bridge.execute_jsx(script)

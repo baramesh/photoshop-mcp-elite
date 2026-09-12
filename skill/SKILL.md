@@ -65,6 +65,13 @@ Before executing any edits (especially Sky Replacement or Inpainting), analyze t
 - **Sky Mask**: `photoshop_select_sky`
 - **Subject Cutout**: `photoshop_select_subject`
 
+### Pro & Non-Destructive Tools
+- **Camera Raw Grading**: `photoshop_apply_camera_raw_filter` (Pro exposure, clarity, dehaze, temperature, vibrance).
+- **True Adjustment Layers**: `photoshop_create_adjustment_layer` (curves, hue_saturation, levels, brightness_contrast, vibrance).
+- **Smart Objects**: `photoshop_convert_to_smart_object`.
+- **Typography & Vector Text**: `photoshop_add_text_layer`.
+- **Layer Styles (FX)**: `photoshop_apply_layer_style` (drop_shadow, stroke).
+
 ### Adjustments & Filters
 - `photoshop_adjust_brightness_contrast`, `photoshop_adjust_curves_auto`, `photoshop_adjust_hue_saturation`, `photoshop_apply_gaussian_blur`, `photoshop_auto_levels`, `photoshop_auto_contrast`.
 

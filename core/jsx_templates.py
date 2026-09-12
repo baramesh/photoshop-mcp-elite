@@ -569,3 +569,210 @@ REDO = """
     }
 })();
 """
+
+# --- Pro & Advanced Features: Camera Raw, Adjustment Layers, Typography, Layer Styles ---
+
+def camera_raw_filter_script(
+    exposure: float = 0.0,
+    contrast: int = 0,
+    highlights: int = 0,
+    shadows: int = 0,
+    clarity: int = 0,
+    dehaze: int = 0,
+    vibrance: int = 0,
+    saturation: int = 0,
+    temperature: int = 0,
+    tint: int = 0
+) -> str:
+    """Invokes Adobe Camera Raw Filter with specific development settings."""
+    return f"""
+    (function() {{
+        try {{
+            var idAdobeCameraRaw = stringIDToTypeID("Adobe Camera Raw Filter");
+            var desc = new ActionDescriptor();
+            var crSettings = new ActionDescriptor();
+            
+            if ({exposure} !== 0.0) crSettings.putDouble(stringIDToTypeID("Exposure2012"), {exposure});
+            if ({contrast} !== 0) crSettings.putInteger(stringIDToTypeID("Contrast2012"), {contrast});
+            if ({highlights} !== 0) crSettings.putInteger(stringIDToTypeID("Highlights2012"), {highlights});
+            if ({shadows} !== 0) crSettings.putInteger(stringIDToTypeID("Shadows2012"), {shadows});
+            if ({clarity} !== 0) crSettings.putInteger(stringIDToTypeID("Clarity2012"), {clarity});
+            if ({dehaze} !== 0) crSettings.putInteger(stringIDToTypeID("Dehaze"), {dehaze});
+            if ({vibrance} !== 0) crSettings.putInteger(stringIDToTypeID("Vibrance"), {vibrance});
+            if ({saturation} !== 0) crSettings.putInteger(stringIDToTypeID("Saturation"), {saturation});
+            if ({temperature} !== 0) crSettings.putInteger(stringIDToTypeID("Temperature"), {temperature});
+            if ({tint} !== 0) crSettings.putInteger(stringIDToTypeID("Tint"), {tint});
+            
+            desc.putObject(stringIDToTypeID("CrSettings"), stringIDToTypeID("CrSettings"), crSettings);
+            executeAction(idAdobeCameraRaw, desc, DialogModes.NO);
+            return JSON.stringify({{ok: true, message: "Camera Raw Filter applied successfully"}});
+        }} catch(e) {{
+            return JSON.stringify({{ok: false, error: e.message}});
+        }}
+    }})();
+    """
+
+CONVERT_TO_SMART_OBJECT = """
+(function() {
+    try {
+        var idnewPlacedLayer = stringIDToTypeID("newPlacedLayer");
+        executeAction(idnewPlacedLayer, undefined, DialogModes.NO);
+        return JSON.stringify({ok: true, name: app.activeDocument.activeLayer.name});
+    } catch(e) {
+        return JSON.stringify({ok: false, error: e.message});
+    }
+})();
+"""
+
+def create_adjustment_layer_script(adj_type: str, name: str | None = None) -> str:
+    """Creates a true non-destructive Adjustment Layer (e.g. curves, hue_saturation, levels, solid_color)."""
+    type_map = {
+        "curves": "curves",
+        "hue_saturation": "hueSaturation",
+        "levels": "levels",
+        "brightness_contrast": "brightnessContrast",
+        "color_lookup": "colorLookup",
+        "photo_filter": "photoFilter",
+        "black_and_white": "blackAndWhite",
+        "vibrance": "vibrance"
+    }
+    adj_id = type_map.get(adj_type.lower(), "curves")
+    layer_name = name or (adj_type.replace("_", " ").title() + " 1")
+    escaped_name = layer_name.replace('"', '\\"')
+
+    return f"""
+    (function() {{
+        try {{
+            var idmake = stringIDToTypeID("make");
+            var desc = new ActionDescriptor();
+            var ref = new ActionReference();
+            ref.putClass(stringIDToTypeID("adjustmentLayer"));
+            desc.putReference(stringIDToTypeID("null"), ref);
+            
+            var adjDesc = new ActionDescriptor();
+            var classDesc = new ActionDescriptor();
+            adjDesc.putClass(stringIDToTypeID("type"), stringIDToTypeID("{adj_id}"));
+            adjDesc.putString(stringIDToTypeID("name"), "{escaped_name}");
+            desc.putObject(stringIDToTypeID("using"), stringIDToTypeID("adjustmentLayer"), adjDesc);
+            
+            executeAction(idmake, desc, DialogModes.NO);
+            return JSON.stringify({{ok: true, name: "{escaped_name}", type: "{adj_type}"}});
+        }} catch(e) {{
+            return JSON.stringify({{ok: false, error: e.message}});
+        }}
+    }})();
+    """
+
+def add_text_layer_script(
+    text: str,
+    font_name: str = "Helvetica",
+    font_size_pt: float = 24.0,
+    color_hex: str = "FFFFFF",
+    x_px: float = 100.0,
+    y_px: float = 100.0,
+    justification: str = "left"
+) -> str:
+    """Creates a vector Typography Text Layer in the active document."""
+    escaped_text = text.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\r")
+    clean_hex = color_hex.lstrip("#")
+    r = int(clean_hex[0:2], 16) if len(clean_hex) >= 2 else 255
+    g = int(clean_hex[2:4], 16) if len(clean_hex) >= 4 else 255
+    b = int(clean_hex[4:6], 16) if len(clean_hex) >= 6 else 255
+
+    just_enum = "Justification.LEFT"
+    if justification.lower() == "center":
+        just_enum = "Justification.CENTER"
+    elif justification.lower() == "right":
+        just_enum = "Justification.RIGHT"
+
+    return f"""
+    (function() {{
+        try {{
+            var doc = app.activeDocument;
+            var textLayer = doc.artLayers.add();
+            textLayer.kind = LayerKind.TEXT;
+            textLayer.name = "{escaped_text.split('\\r')[0][:30]}";
+            
+            var textItem = textLayer.textItem;
+            textItem.contents = "{escaped_text}";
+            textItem.size = {font_size_pt};
+            textItem.position = [{x_px}, {y_px}];
+            textItem.justification = {just_enum};
+            
+            try {{
+                textItem.font = "{font_name}";
+            }} catch(fErr) {{}}
+            
+            var textColor = new SolidColor();
+            textColor.rgb.red = {r};
+            textColor.rgb.green = {g};
+            textColor.rgb.blue = {b};
+            textItem.color = textColor;
+            
+            return JSON.stringify({{ok: true, name: textLayer.name, id: textLayer.id}});
+        }} catch(e) {{
+            return JSON.stringify({{ok: false, error: e.message}});
+        }}
+    }})();
+    """
+
+def apply_layer_style_script(
+    drop_shadow: bool = False,
+    shadow_opacity: float = 50.0,
+    shadow_distance: int = 5,
+    shadow_size: int = 10,
+    stroke: bool = False,
+    stroke_size: int = 2,
+    stroke_color_hex: str = "000000"
+) -> str:
+    """Applies Layer Styles (FX) like Drop Shadow and Stroke to the active layer."""
+    clean_hex = stroke_color_hex.lstrip("#")
+    sr = int(clean_hex[0:2], 16) if len(clean_hex) >= 2 else 0
+    sg = int(clean_hex[2:4], 16) if len(clean_hex) >= 4 else 0
+    sb = int(clean_hex[4:6], 16) if len(clean_hex) >= 6 else 0
+
+    return f"""
+    (function() {{
+        try {{
+            var idset = stringIDToTypeID("set");
+            var desc = new ActionDescriptor();
+            var ref = new ActionReference();
+            ref.putProperty(stringIDToTypeID("property"), stringIDToTypeID("layerEffects"));
+            ref.putEnumerated(stringIDToTypeID("layer"), stringIDToTypeID("ordinal"), stringIDToTypeID("targetEnum"));
+            desc.putReference(stringIDToTypeID("null"), ref);
+            
+            var fxDesc = new ActionDescriptor();
+            fxDesc.putUnitDouble(stringIDToTypeID("scale"), stringIDToTypeID("percentUnit"), 100.0);
+            
+            if ({str(drop_shadow).lower()}) {{
+                var dsDesc = new ActionDescriptor();
+                dsDesc.putBoolean(stringIDToTypeID("enabled"), true);
+                dsDesc.putEnumerated(stringIDToTypeID("mode"), stringIDToTypeID("blendMode"), stringIDToTypeID("multiply"));
+                dsDesc.putUnitDouble(stringIDToTypeID("opacity"), stringIDToTypeID("percentUnit"), {shadow_opacity});
+                dsDesc.putUnitDouble(stringIDToTypeID("distance"), stringIDToTypeID("pixelsUnit"), {shadow_distance});
+                dsDesc.putUnitDouble(stringIDToTypeID("blur"), stringIDToTypeID("pixelsUnit"), {shadow_size});
+                fxDesc.putObject(stringIDToTypeID("dropShadow"), stringIDToTypeID("dropShadow"), dsDesc);
+            }}
+            
+            if ({str(stroke).lower()}) {{
+                var stDesc = new ActionDescriptor();
+                stDesc.putBoolean(stringIDToTypeID("enabled"), true);
+                stDesc.putUnitDouble(stringIDToTypeID("size"), stringIDToTypeID("pixelsUnit"), {stroke_size});
+                stDesc.putEnumerated(stringIDToTypeID("style"), stringIDToTypeID("frameStyle"), stringIDToTypeID("outsetFrame"));
+                
+                var strokeColor = new ActionDescriptor();
+                strokeColor.putDouble(stringIDToTypeID("red"), {sr}.0);
+                strokeColor.putDouble(stringIDToTypeID("green"), {sg}.0);
+                strokeColor.putDouble(stringIDToTypeID("blue"), {sb}.0);
+                stDesc.putObject(stringIDToTypeID("color"), stringIDToTypeID("RGBColor"), strokeColor);
+                fxDesc.putObject(stringIDToTypeID("frameFX"), stringIDToTypeID("frameFX"), stDesc);
+            }}
+            
+            desc.putObject(stringIDToTypeID("to"), stringIDToTypeID("layerEffects"), fxDesc);
+            executeAction(idset, desc, DialogModes.NO);
+            return JSON.stringify({{ok: true, message: "Layer style applied"}});
+        }} catch(e) {{
+            return JSON.stringify({{ok: false, error: e.message}});
+        }}
+    }})();
+    """

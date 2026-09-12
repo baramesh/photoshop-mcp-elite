@@ -88,3 +88,63 @@ def flatten_image() -> dict[str, Any]:
     if isinstance(res, dict):
         return res
     return {"ok": True}
+
+
+def convert_to_smart_object() -> dict[str, Any]:
+    """Convert the active layer or selected layers into a Smart Object."""
+    from core.jsx_templates import CONVERT_TO_SMART_OBJECT
+    res = bridge.execute_jsx(CONVERT_TO_SMART_OBJECT)
+    if isinstance(res, dict):
+        return res
+    return {"ok": True}
+
+
+def create_adjustment_layer(adj_type: str = "curves", name: str | None = None) -> dict[str, Any]:
+    """Create a true non-destructive Adjustment Layer (curves, hue_saturation, levels, brightness_contrast, vibrance)."""
+    from core.jsx_templates import create_adjustment_layer_script
+    res = bridge.execute_jsx(create_adjustment_layer_script(adj_type, name))
+    if isinstance(res, dict):
+        return res
+    return {"ok": True, "type": adj_type}
+
+
+def add_text_layer(
+    text: str,
+    font_name: str = "Helvetica",
+    font_size_pt: float = 24.0,
+    color_hex: str = "FFFFFF",
+    x_px: float = 100.0,
+    y_px: float = 100.0,
+    justification: str = "left"
+) -> dict[str, Any]:
+    """Create a vector text typography layer."""
+    from core.jsx_templates import add_text_layer_script
+    res = bridge.execute_jsx(add_text_layer_script(text, font_name, font_size_pt, color_hex, x_px, y_px, justification))
+    if isinstance(res, dict):
+        return res
+    return {"ok": True, "text": text}
+
+
+def apply_layer_style(
+    drop_shadow: bool = False,
+    shadow_opacity: float = 50.0,
+    shadow_distance: int = 5,
+    shadow_size: int = 10,
+    stroke: bool = False,
+    stroke_size: int = 2,
+    stroke_color_hex: str = "000000"
+) -> dict[str, Any]:
+    """Apply Layer FX styles (Drop Shadow, Stroke) to the active layer."""
+    from core.jsx_templates import apply_layer_style_script
+    res = bridge.execute_jsx(apply_layer_style_script(
+        drop_shadow=drop_shadow,
+        shadow_opacity=shadow_opacity,
+        shadow_distance=shadow_distance,
+        shadow_size=shadow_size,
+        stroke=stroke,
+        stroke_size=stroke_size,
+        stroke_color_hex=stroke_color_hex
+    ))
+    if isinstance(res, dict):
+        return res
+    return {"ok": True}

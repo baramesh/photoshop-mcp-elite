@@ -112,7 +112,7 @@ Add `photoshop` to your client configuration:
 
 ---
 
-## 🛠️ Tool Catalog (42 Tools)
+## 🛠️ Tool Catalog (47 Tools)
 
 ### Generative AI & Smart Workflows
 * `photoshop_generative_fill_ai`: Autonomously trigger Adobe Firefly on the current selection with an optional prompt.
@@ -120,6 +120,13 @@ Add `photoshop` to your client configuration:
 * `photoshop_harmonize_sky`: Sensei sky selection + replacement + horizon atmospheric haze + foreground ambient light matching.
 * `photoshop_smart_remove_distractions`: Multi-region precision removal with expansion + feathering on a non-destructive Retouch layer.
 * `photoshop_match_lighting_and_tone`: Photo-wide color harmony and contrast adjustment.
+
+### Pro Hollywood & Design Capabilities (New 🚀)
+* `photoshop_apply_camera_raw_filter`: Direct Adobe Camera Raw engine controls (Exposure, Contrast, Highlights, Shadows, Clarity, Dehaze, Vibrance, Saturation, Temperature, Tint).
+* `photoshop_create_adjustment_layer`: Creates true non-destructive Adjustment Layers (`curves`, `hue_saturation`, `levels`, `brightness_contrast`, `vibrance`, `black_and_white`).
+* `photoshop_convert_to_smart_object`: Wraps active or selected layers into a Smart Object for non-destructive filter stacks.
+* `photoshop_add_text_layer`: Creates vector Typography text layers with custom fonts, point size, hex colors, and alignment.
+* `photoshop_apply_layer_style`: Applies layer effects (FX) including Drop Shadow (opacity, distance, blur) and Stroke (color, size).
 
 ### Sensei AI & Selections
 * `photoshop_select_sky`: Adobe Sensei AI sky contour isolation.

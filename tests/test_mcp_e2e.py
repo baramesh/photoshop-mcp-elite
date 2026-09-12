@@ -28,14 +28,16 @@ async def test_mcp_server_e2e_lifecycle():
             tool_names = [t.name for t in tools_res.tools]
 
             # Verify total count and critical features
-            assert len(tool_names) == 42
+            assert len(tool_names) == 47
             assert "photoshop_get_document_info" in tool_names
             assert "photoshop_generative_fill_ai" in tool_names
             assert "photoshop_generative_remove_ai" in tool_names
             assert "photoshop_harmonize_sky" in tool_names
-            assert "photoshop_smart_remove_distractions" in tool_names
-            assert "photoshop_select_sky" in tool_names
-            assert "photoshop_select_subject" in tool_names
+            assert "photoshop_convert_to_smart_object" in tool_names
+            assert "photoshop_create_adjustment_layer" in tool_names
+            assert "photoshop_apply_camera_raw_filter" in tool_names
+            assert "photoshop_add_text_layer" in tool_names
+            assert "photoshop_apply_layer_style" in tool_names
             assert "photoshop_execute_custom_jsx" in tool_names
 
             # 3. Call a tool schema inspection (verify input schema is valid)

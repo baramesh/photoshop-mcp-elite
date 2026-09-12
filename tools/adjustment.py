@@ -71,3 +71,34 @@ def apply_gaussian_blur(radius: float) -> dict[str, Any]:
     if isinstance(res, dict):
         return res
     return {"ok": True, "radius": radius}
+
+
+def apply_camera_raw_filter(
+    exposure: float = 0.0,
+    contrast: int = 0,
+    highlights: int = 0,
+    shadows: int = 0,
+    clarity: int = 0,
+    dehaze: int = 0,
+    vibrance: int = 0,
+    saturation: int = 0,
+    temperature: int = 0,
+    tint: int = 0
+) -> dict[str, Any]:
+    """Apply Adobe Camera Raw Filter with professional color grading controls."""
+    from core.jsx_templates import camera_raw_filter_script
+    res = bridge.execute_jsx(camera_raw_filter_script(
+        exposure=exposure,
+        contrast=contrast,
+        highlights=highlights,
+        shadows=shadows,
+        clarity=clarity,
+        dehaze=dehaze,
+        vibrance=vibrance,
+        saturation=saturation,
+        temperature=temperature,
+        tint=tint
+    ))
+    if isinstance(res, dict):
+        return res
+    return {"ok": True, "message": "Camera Raw Filter applied"}

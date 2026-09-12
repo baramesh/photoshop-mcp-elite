@@ -1,0 +1,20 @@
+[project]
+name = "photoshop-python-mcp"
+version = "0.1.0"
+description = "High-performance, autonomous Adobe Photoshop MCP server in Python with AppleScript bridging, Adobe Firefly Generative AI automation, and photographic workflows."
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    { name = "Baramesh" }
+]
+license = { text = "MIT" }
+keywords = ["mcp", "model-context-protocol", "photoshop", "adobe", "firefly", "photography", "ai", "automation"]
+dependencies = [
+    "mcp[cli]>=1.3.0",
+    "pillow>=12.3.0",
+    "pydantic>=2.13.5",
+    "simple-lama-inpainting>=0.1.0",
+]
+
+[project.scripts]
+photoshop-mcp = "server:main"

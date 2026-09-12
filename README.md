@@ -54,6 +54,22 @@ To allow the server to autonomously trigger Adobe Firefly without requiring manu
 
 ---
 
+## 🧠 AI Agent Skill (`SKILL.md`)
+
+This repository includes a ready-to-use Agent Skill in `skill/SKILL.md` for AI coding assistants and autonomous agents (e.g., Antigravity, Claude Code, Cursor):
+
+* **Photographic Intelligence**: Guides agents on how to assess lighting direction, color temperature, and atmospheric horizon haze before editing.
+* **Firefly & Inpainting Rules**: Instructs agents when to avoid naive Content-Aware Fill and how to use autonomous Generative Fill with surgical selections.
+* **Non-Destructive Standard**: Enforces layer labeling and non-destructive retouching practices.
+
+To install the skill in your local Antigravity / Agent configuration:
+```bash
+mkdir -p ~/.gemini/config/skills/photoshop-mcp-elite
+cp skill/SKILL.md ~/.gemini/config/skills/photoshop-mcp-elite/
+```
+
+---
+
 ## ⚙️ MCP Configuration
 
 Add `photoshop` to your client configuration:

@@ -112,8 +112,9 @@ def test_coverage_boosters(mock_bridge):
 
 
 def test_workflows_mocked(monkeypatch):
-    from tools import workflows
     from unittest.mock import MagicMock
+
+    from tools import workflows
 
     mock_b = MagicMock()
     mock_b.execute_jsx.return_value = {"ok": True}

@@ -130,3 +130,20 @@ When asked to create marketing graphics, posters, thumbnails, or banners:
 1. **Preserve Master Pixels**: Never overwrite or delete the original `Background` layer.
 2. **Dedicated Labeled Layers**: Retouching, sky replacement, text, and grading must reside on explicitly named layers (`Smart Retouch`, `Sky Composite`, `Camera Raw Grade`, `Hero Typography`).
 3. **Visual Verification**: Before finishing, always export a preview using `photoshop_export_as(file_path, "jpg", 90)` to verify overall visual harmony and composition.
+
+---
+
+## 8. Golden Few-Shot Examples (ตัวอย่างอ้างอิงลำดับการคิดและปฏิบัติ)
+
+When handling complex retouching and design requests, refer to the verified workflows in `examples/`:
+
+* **[Golden Example 1: Master Travel & Architectural Retouch](examples/travel_architectural_retouch.md)**:
+  - Removal of multiple tourists from historic balustrades with Adobe Firefly Generative AI.
+  - Sensei sky isolation + horizon haze injection + ambient foreground warming.
+  - Smart Object Camera Raw finishing (Dehaze, Clarity, Vibrance).
+* **[Golden Example 2: Social Media Marketing Banner](examples/marketing_banner_design.md)**:
+  - Typographic visual hierarchy (64pt bold headline, 28pt subtitle).
+  - Guaranteed text legibility via Layer Styles FX (Drop Shadow + Outset Stroke).
+* **[Golden Example 3: Studio & Editorial Portrait Grading](examples/editorial_portrait_grading.md)**:
+  - Adobe Sensei subject isolation.
+  - Skin tone luminance protection (Vibrance over Saturation, negative Clarity on skin).
